@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Provider } from "react-redux"
 import { store } from "@/store"
-import { PomodoroTimer, StatsChart } from "@/widgets"
+import { PomodoroTimer } from "@/widgets"
 
 export const MainPage = () => {
 	useEffect(() => {
