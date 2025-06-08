@@ -17,7 +17,7 @@ export const MainPage = () => {
 			<div className='app'>
 				<h1>Pomodoro Tracker</h1>
 				<PomodoroTimer />
-				<StatsChart />
+				{/* <StatsChart /> */}
 			</div>
 		</Provider>
 	)

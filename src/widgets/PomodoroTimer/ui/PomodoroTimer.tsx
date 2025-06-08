@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState, AppDispatch } from "@/store"
 import { startTimer, pauseTimer, resetTimer, tick } from "@/store"
+import styles from "./PomodoroTimer.module.scss"
 
 export const PomodoroTimer: React.FC = () => {
 	const dispatch = useDispatch<AppDispatch>()
@@ -58,22 +59,39 @@ export const PomodoroTimer: React.FC = () => {
 	}
 
 	return (
-		<div className={`pomodoro-container ${isWorkTime ? "work" : "break"}`}>
+		<div className={styles.wrapper}>
 			<h1>{isWorkTime ? "Work Time" : "Break Time"}</h1>
-			<div className='timer'>{formatTime(timeLeft)}</div>
+			<div className={styles.timer}>{formatTime(timeLeft)}</div>
 
-			<div className='controls'>
+			<div className={styles.buttonsWrapper}>
 				{!isRunning ? (
-					<button onClick={() => dispatch(startTimer())}>Start</button>
+					<button
+						onClick={() => dispatch(startTimer())}
+						className={styles.button}
+					>
+						Start
+					</button>
 				) : (
-					<button onClick={() => dispatch(pauseTimer())}>Pause</button>
+					<button
+						onClick={() => dispatch(pauseTimer())}
+						className={styles.button}
+					>
+						Pause
+					</button>
 				)}
-				<button onClick={() => dispatch(resetTimer())}>Reset</button>
+				<button
+					onClick={() => dispatch(resetTimer())}
+					className={styles.button}
+				>
+					Reset
+				</button>
 			</div>
 
-			<div className='stats'>
-				<p>Sessions completed: {sessionsCompleted}</p>
-				<p>Total work time: {formatTime(totalWorkTime)}</p>
+			<div>
+				<p className={styles.text}>Sessions completed: {sessionsCompleted}</p>
+				<p className={styles.text}>
+					Total work time: {formatTime(totalWorkTime)}
+				</p>
 			</div>
 		</div>
 	)
