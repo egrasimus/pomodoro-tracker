@@ -1,0 +1,64 @@
+.settings {
+	position: relative;
+	margin-bottom: 1rem;
+}
+
+.settingsPanel {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.8));
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+	padding: 1.5rem;
+	min-width: 300px;
+	max-width: 350px;
+	z-index: 1000;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+	h3 {
+		margin: 0 0 1rem 0;
+		color: #646cff;
+	}
+}
+
+.setting {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1rem;
+
+	label {
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+	}
+
+	input {
+		padding: 0.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.1);
+		color: white;
+		font-family: inherit;
+
+		&:focus {
+			outline: none;
+			border-color: #646cff;
+		}
+	}
+}
+
+.actions {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+	.settingsPanel {
+		right: -1rem;
+		min-width: 280px;
+		max-width: calc(100vw - 2rem);
+	}
+}

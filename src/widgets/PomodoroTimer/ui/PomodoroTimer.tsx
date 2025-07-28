@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState, AppDispatch } from "@/store"
 import { startTimer, pauseTimer, resetTimer, tick } from "@/store"
+import { Button, formatTime } from "@/shared"
+import { TimerSettings } from "@/features/TimerSettings"
 import styles from "./PomodoroTimer.module.scss"
 
 export const PomodoroTimer: React.FC = () => {
@@ -79,44 +81,40 @@ export const PomodoroTimer: React.FC = () => {
 		}
 	}, [timeLeft, isWorkTime, isRunning])
 
-	const formatTime = (seconds: number): string => {
-		const mins = Math.floor(seconds / 60)
-		const secs = seconds % 60
-		return `${mins.toString().padStart(2, "0")}:${secs
-			.toString()
-			.padStart(2, "0")}`
-	}
-
 	return (
 		<div className={styles.wrapper}>
+			<TimerSettings />
 			<h1>{isWorkTime ? "Work Time" : "Break Time"}</h1>
 			<div className={styles.timer}>{formatTime(timeLeft)}</div>
 
 			<div className={styles.buttonsWrapper}>
 				{!isRunning ? (
-					<button
+					<Button
 						onClick={() => {
 							dispatch(startTimer())
 							setNow(Date.now())
 						}}
-						className={styles.button}
+						variant='primary'
+						size='large'
 					>
 						Start
-					</button>
+					</Button>
 				) : (
-					<button
+					<Button
 						onClick={() => dispatch(pauseTimer())}
-						className={styles.button}
+						variant='secondary'
+						size='large'
 					>
 						Pause
-					</button>
+					</Button>
 				)}
-				<button
+				<Button
 					onClick={() => dispatch(resetTimer())}
-					className={styles.button}
+					variant='danger'
+					size='large'
 				>
 					Reset
-				</button>
+				</Button>
 			</div>
 
 			<div>

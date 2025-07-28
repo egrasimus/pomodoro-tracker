@@ -1,7 +1,6 @@
 import { useEffect } from "react"
-import { Provider } from "react-redux"
-import { store } from "@/store"
-import { PomodoroTimer } from "@/widgets"
+import { PomodoroTimer, StatsChart } from "@/widgets"
+import styles from "./MainPage.module.scss"
 
 export const MainPage = () => {
 	useEffect(() => {
@@ -13,12 +12,10 @@ export const MainPage = () => {
 	}, [])
 
 	return (
-		<Provider store={store}>
-			<div className='app'>
-				<h1>Pomodoro Tracker</h1>
-				<PomodoroTimer />
-				{/* <StatsChart /> */}
-			</div>
-		</Provider>
+		<div className={styles.app}>
+			<h1>Pomodoro Tracker</h1>
+			<PomodoroTimer />
+			<StatsChart />
+		</div>
 	)
 }
