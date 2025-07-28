@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { PomodoroTimer, StatsChart, Header } from "@/widgets"
+import { PomodoroTimer, StatsChart, Header, MiniTimer } from "@/widgets"
 import { BackgroundVideo } from "@/shared"
 import coffeeVideo from "@/assets/videos/coffee.mp4"
 import styles from "./MainPage.module.scss"
@@ -7,6 +7,10 @@ import styles from "./MainPage.module.scss"
 export const MainPage = () => {
 	const [isStatsVisible, setIsStatsVisible] = useState(() => {
 		const saved = localStorage.getItem("statsVisible")
+		return saved ? JSON.parse(saved) : false
+	})
+	const [isTimerMinimized, setIsTimerMinimized] = useState(() => {
+		const saved = localStorage.getItem("timerMinimized")
 		return saved ? JSON.parse(saved) : false
 	})
 
@@ -24,14 +28,23 @@ export const MainPage = () => {
 		localStorage.setItem("statsVisible", JSON.stringify(newValue))
 	}
 
+	const toggleTimer = () => {
+		const newValue = !isTimerMinimized
+		setIsTimerMinimized(newValue)
+		localStorage.setItem("timerMinimized", JSON.stringify(newValue))
+	}
+
 	return (
 		<div className={styles.app}>
 			<BackgroundVideo src={coffeeVideo} />
 			<Header isStatsVisible={isStatsVisible} onToggleStats={toggleStats} />
 			<main className={styles.main}>
-				<PomodoroTimer />
+				{!isTimerMinimized && !isStatsVisible && (
+					<PomodoroTimer onMinimize={toggleTimer} />
+				)}
 				{isStatsVisible && <StatsChart />}
 			</main>
+			{isTimerMinimized && <MiniTimer onMaximize={toggleTimer} />}
 		</div>
 	)
 }

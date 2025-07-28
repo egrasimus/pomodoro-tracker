@@ -1,13 +1,18 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState, AppDispatch } from "@/store"
-import { startTimer, pauseTimer, resetTimer, tick } from "@/store"
-import { Button, formatTime } from "@/shared"
+import { startTimer, pauseTimer, resetTimer } from "@/store"
+import { Button, formatTime, useTimer } from "@/shared"
 import { TimerSettings } from "@/features/TimerSettings"
 import styles from "./PomodoroTimer.module.scss"
 
-export const PomodoroTimer: React.FC = () => {
+interface PomodoroTimerProps {
+	onMinimize?: () => void
+}
+
+export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onMinimize }) => {
 	const dispatch = useDispatch<AppDispatch>()
+	const history = useSelector((state: RootState) => state.timer.history)
 	const {
 		isRunning,
 		isWorkTime,
@@ -15,11 +20,8 @@ export const PomodoroTimer: React.FC = () => {
 		duration,
 		sessionsCompleted,
 		totalWorkTime,
-	} = useSelector((state: RootState) => state.timer)
-	const history = useSelector((state: RootState) => state.timer.history)
-
-	const [now, setNow] = useState(Date.now())
-	const intervalRef = useRef<NodeJS.Timeout | null>(null)
+		timeLeft,
+	} = useTimer()
 
 	// Сохраняем состояние в localStorage
 	useEffect(() => {
@@ -44,58 +46,27 @@ export const PomodoroTimer: React.FC = () => {
 		totalWorkTime,
 	])
 
-	// Интервал только для обновления UI
-	useEffect(() => {
-		if (isRunning) {
-			intervalRef.current = setInterval(() => {
-				setNow(Date.now())
-				if (isRunning && startTimestamp) {
-					const elapsed = Math.floor((Date.now() - startTimestamp) / 1000)
-					if (duration - elapsed <= 0) {
-						dispatch(tick())
-					}
-				}
-			}, 1000)
-		} else {
-			if (intervalRef.current) clearInterval(intervalRef.current)
-		}
-		return () => {
-			if (intervalRef.current) clearInterval(intervalRef.current)
-		}
-	}, [isRunning, dispatch, startTimestamp, duration])
-
-	// Вычисляем оставшееся время
-	let timeLeft = duration
-	if (isRunning && startTimestamp) {
-		const elapsed = Math.floor((now - startTimestamp) / 1000)
-		timeLeft = Math.max(duration - elapsed, 0)
-	}
-
-	useEffect(() => {
-		if (timeLeft === 0 && isRunning) {
-			new Notification(isWorkTime ? "Время отдыхать!" : "Время работать!", {
-				body: isWorkTime
-					? "25-минутная сессия завершена. Сделайте перерыв!"
-					: "5-минутный перерыв завершен. Пора работать!",
-			})
-		}
-	}, [timeLeft, isWorkTime, isRunning])
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.header}>
 				<TimerSettings />
 				<h1>{isWorkTime ? "Work Time" : "Break Time"}</h1>
+				{onMinimize && (
+					<button
+						onClick={onMinimize}
+						className={styles.minimizeBtn}
+						title='Minimize'
+					>
+						-
+					</button>
+				)}
 			</div>
 			<div className={styles.timer}>{formatTime(timeLeft)}</div>
 
 			<div className={styles.buttonsWrapper}>
 				{!isRunning ? (
 					<Button
-						onClick={() => {
-							dispatch(startTimer())
-							setNow(Date.now())
-						}}
+						onClick={() => dispatch(startTimer())}
 						variant='primary'
 						size='large'
 					>
