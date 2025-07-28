@@ -1,16 +1,12 @@
 import "./App.css"
 import { MainPage } from "@/pages/MainPage"
-import backgroundImage from "@/assets/images/background.png"
-import styles from "./App.module.scss"
+import { ErrorBoundary } from "./ErrorBoundary"
 
 function App() {
 	return (
-		<div>
+		<ErrorBoundary>
 			<MainPage />
-			<div className={styles.appBackground}>
-				<img src={backgroundImage} alt='Background' />
-			</div>
-		</div>
+		</ErrorBoundary>
 	)
 }
 

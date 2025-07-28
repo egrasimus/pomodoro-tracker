@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
+import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface TimerState {
 	isRunning: boolean
 	isWorkTime: boolean
-	timeLeft: number
+	startTimestamp: number | null // ms since epoch
+	duration: number // seconds
 	sessionsCompleted: number
 	totalWorkTime: number
 	history: Array<{ date: string; sessions: number }>
@@ -20,7 +22,8 @@ const loadState = (): TimerState => {
 	return {
 		isRunning: false,
 		isWorkTime: true,
-		timeLeft: WORK_DURATION,
+		startTimestamp: null,
+		duration: WORK_DURATION,
 		sessionsCompleted: 0,
 		totalWorkTime: 0,
 		history: [],
@@ -35,27 +38,45 @@ export const timerSlice = createSlice({
 	reducers: {
 		startTimer: (state) => {
 			state.isRunning = true
+			// Сбросить duration только если это новый запуск (а не пауза)
+			if (
+				state.startTimestamp === null &&
+				((state.isWorkTime && state.duration === WORK_DURATION) ||
+					(!state.isWorkTime && state.duration === BREAK_DURATION))
+			) {
+				state.duration = state.isWorkTime ? WORK_DURATION : BREAK_DURATION
+			}
+			state.startTimestamp = Date.now()
 		},
 		pauseTimer: (state) => {
-			state.isRunning = false
+			if (state.isRunning && state.startTimestamp) {
+				const elapsed = Math.floor((Date.now() - state.startTimestamp) / 1000)
+				state.duration = Math.max(state.duration - elapsed, 0)
+				state.startTimestamp = null
+				state.isRunning = false
+			}
 		},
 		resetTimer: (state) => {
 			state.isRunning = false
 			state.isWorkTime = true
-			state.timeLeft = WORK_DURATION
+			state.startTimestamp = null
+			state.duration = WORK_DURATION
 		},
 		tick: (state) => {
-			if (state.timeLeft > 0) {
-				state.timeLeft -= 1
+			if (!state.isRunning || !state.startTimestamp) return
+			const elapsed = Math.floor((Date.now() - state.startTimestamp) / 1000)
+			const timeLeft = Math.max(state.duration - elapsed, 0)
+			if (timeLeft > 0) {
 				if (state.isWorkTime) {
 					state.totalWorkTime += 1
 				}
 			} else {
 				state.isRunning = false
+				state.startTimestamp = null
 				if (state.isWorkTime) {
 					state.sessionsCompleted += 1
 					state.isWorkTime = false
-					state.timeLeft = BREAK_DURATION
+					state.duration = BREAK_DURATION
 					const today = new Date().toISOString().split("T")[0]
 					const dayInHistory = state.history.find((day) => day.date === today)
 					if (dayInHistory) {
@@ -65,12 +86,22 @@ export const timerSlice = createSlice({
 					}
 				} else {
 					state.isWorkTime = true
-					state.timeLeft = WORK_DURATION
+					state.duration = WORK_DURATION
 				}
 			}
+		},
+		setTime: (
+			state,
+			action: PayloadAction<{ duration: number; isWorkTime: boolean }>
+		) => {
+			state.duration = action.payload.duration
+			state.isWorkTime = action.payload.isWorkTime
+			state.startTimestamp = null
+			state.isRunning = false
 		},
 	},
 })
 
-export const { startTimer, pauseTimer, resetTimer, tick } = timerSlice.actions
+export const { startTimer, pauseTimer, resetTimer, tick, setTime } =
+	timerSlice.actions
 export default timerSlice.reducer

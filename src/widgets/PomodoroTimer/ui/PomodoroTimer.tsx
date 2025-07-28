@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState, AppDispatch } from "@/store"
 import { startTimer, pauseTimer, resetTimer, tick } from "@/store"
@@ -6,49 +6,78 @@ import styles from "./PomodoroTimer.module.scss"
 
 export const PomodoroTimer: React.FC = () => {
 	const dispatch = useDispatch<AppDispatch>()
-	const { isRunning, isWorkTime, timeLeft, sessionsCompleted, totalWorkTime } =
-		useSelector((state: RootState) => state.timer)
+	const {
+		isRunning,
+		isWorkTime,
+		startTimestamp,
+		duration,
+		sessionsCompleted,
+		totalWorkTime,
+	} = useSelector((state: RootState) => state.timer)
 	const history = useSelector((state: RootState) => state.timer.history)
 
+	const [now, setNow] = useState(Date.now())
+	const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+	// Сохраняем состояние в localStorage
 	useEffect(() => {
 		localStorage.setItem(
 			"pomodoroState",
 			JSON.stringify({
 				isRunning,
 				isWorkTime,
-				timeLeft,
+				startTimestamp,
+				duration,
 				sessionsCompleted,
 				totalWorkTime,
 				history,
 			})
 		)
-	}, [isRunning, isWorkTime, timeLeft, sessionsCompleted, totalWorkTime])
+	}, [
+		isRunning,
+		isWorkTime,
+		startTimestamp,
+		duration,
+		sessionsCompleted,
+		totalWorkTime,
+	])
 
+	// Интервал только для обновления UI
 	useEffect(() => {
-		let interval: NodeJS.Timeout | null = null
-
 		if (isRunning) {
-			interval = setInterval(() => {
-				dispatch(tick())
+			intervalRef.current = setInterval(() => {
+				setNow(Date.now())
+				if (isRunning && startTimestamp) {
+					const elapsed = Math.floor((Date.now() - startTimestamp) / 1000)
+					if (duration - elapsed <= 0) {
+						dispatch(tick())
+					}
+				}
 			}, 1000)
-		} else if (interval) {
-			clearInterval(interval)
+		} else {
+			if (intervalRef.current) clearInterval(intervalRef.current)
 		}
-
 		return () => {
-			if (interval) clearInterval(interval)
+			if (intervalRef.current) clearInterval(intervalRef.current)
 		}
-	}, [isRunning, dispatch])
+	}, [isRunning, dispatch, startTimestamp, duration])
+
+	// Вычисляем оставшееся время
+	let timeLeft = duration
+	if (isRunning && startTimestamp) {
+		const elapsed = Math.floor((now - startTimestamp) / 1000)
+		timeLeft = Math.max(duration - elapsed, 0)
+	}
 
 	useEffect(() => {
-		if (timeLeft === 0) {
+		if (timeLeft === 0 && isRunning) {
 			new Notification(isWorkTime ? "Время отдыхать!" : "Время работать!", {
 				body: isWorkTime
 					? "25-минутная сессия завершена. Сделайте перерыв!"
 					: "5-минутный перерыв завершен. Пора работать!",
 			})
 		}
-	}, [timeLeft, isWorkTime])
+	}, [timeLeft, isWorkTime, isRunning])
 
 	const formatTime = (seconds: number): string => {
 		const mins = Math.floor(seconds / 60)
@@ -66,7 +95,10 @@ export const PomodoroTimer: React.FC = () => {
 			<div className={styles.buttonsWrapper}>
 				{!isRunning ? (
 					<button
-						onClick={() => dispatch(startTimer())}
+						onClick={() => {
+							dispatch(startTimer())
+							setNow(Date.now())
+						}}
 						className={styles.button}
 					>
 						Start
