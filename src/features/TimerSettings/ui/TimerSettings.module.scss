@@ -1,6 +1,8 @@
 .settings {
 	position: relative;
-	margin-bottom: 1rem;
+	margin: 0;
+	display: flex;
+	align-items: center;
 }
 
 .settingsPanel {
@@ -10,10 +12,10 @@
 	background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.8));
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 12px;
-	padding: 1.5rem;
-	min-width: 300px;
-	max-width: 350px;
+	border-radius: 10px;
+	padding: 1rem;
+	min-width: 250px;
+	max-width: 300px;
 	z-index: 1000;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 

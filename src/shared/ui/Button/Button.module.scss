@@ -55,6 +55,9 @@
 .small {
 	padding: 0.4em 0.8em;
 	font-size: 0.875em;
+	height: 32px;
+	display: flex;
+	align-items: center;
 }
 
 .medium {
@@ -63,6 +66,6 @@
 }
 
 .large {
-	padding: 0.8em 1.6em;
-	font-size: 1.125em;
+	padding: 0.6em 1.2em;
+	font-size: 1em;
 }

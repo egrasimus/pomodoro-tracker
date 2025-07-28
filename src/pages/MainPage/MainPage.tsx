@@ -1,8 +1,13 @@
-import { useEffect } from "react"
-import { PomodoroTimer, StatsChart } from "@/widgets"
+import { useEffect, useState } from "react"
+import { PomodoroTimer, StatsChart, Header } from "@/widgets"
 import styles from "./MainPage.module.scss"
 
 export const MainPage = () => {
+	const [isStatsVisible, setIsStatsVisible] = useState(() => {
+		const saved = localStorage.getItem("statsVisible")
+		return saved ? JSON.parse(saved) : false
+	})
+
 	useEffect(() => {
 		if (!("Notification" in window)) {
 			console.log("This browser does not support desktop notification")
@@ -11,11 +16,19 @@ export const MainPage = () => {
 		}
 	}, [])
 
+	const toggleStats = () => {
+		const newValue = !isStatsVisible
+		setIsStatsVisible(newValue)
+		localStorage.setItem("statsVisible", JSON.stringify(newValue))
+	}
+
 	return (
 		<div className={styles.app}>
-			<h1>Pomodoro Tracker</h1>
-			<PomodoroTimer />
-			<StatsChart />
+			<Header isStatsVisible={isStatsVisible} onToggleStats={toggleStats} />
+			<main className={styles.main}>
+				<PomodoroTimer />
+				{isStatsVisible && <StatsChart />}
+			</main>
 		</div>
 	)
 }

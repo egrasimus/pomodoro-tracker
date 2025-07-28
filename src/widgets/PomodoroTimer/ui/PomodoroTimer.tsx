@@ -83,8 +83,10 @@ export const PomodoroTimer: React.FC = () => {
 
 	return (
 		<div className={styles.wrapper}>
-			<TimerSettings />
-			<h1>{isWorkTime ? "Work Time" : "Break Time"}</h1>
+			<div className={styles.header}>
+				<TimerSettings />
+				<h1>{isWorkTime ? "Work Time" : "Break Time"}</h1>
+			</div>
 			<div className={styles.timer}>{formatTime(timeLeft)}</div>
 
 			<div className={styles.buttonsWrapper}>
@@ -117,11 +119,9 @@ export const PomodoroTimer: React.FC = () => {
 				</Button>
 			</div>
 
-			<div>
-				<p className={styles.text}>Sessions completed: {sessionsCompleted}</p>
-				<p className={styles.text}>
-					Total work time: {formatTime(totalWorkTime)}
-				</p>
+			<div className={styles.stats}>
+				<p className={styles.text}>Sessions: {sessionsCompleted}</p>
+				<p className={styles.text}>Total: {formatTime(totalWorkTime)}</p>
 			</div>
 		</div>
 	)
