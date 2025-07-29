@@ -64,5 +64,6 @@ export const useTimer = () => {
 		totalWorkTime,
 		timeLeft,
 		now,
+		setNow,
 	}
 }

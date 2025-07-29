@@ -21,6 +21,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onMinimize }) => {
 		sessionsCompleted,
 		totalWorkTime,
 		timeLeft,
+		setNow,
 	} = useTimer()
 
 	// Сохраняем состояние в localStorage
@@ -66,7 +67,10 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onMinimize }) => {
 			<div className={styles.buttonsWrapper}>
 				{!isRunning ? (
 					<Button
-						onClick={() => dispatch(startTimer())}
+						onClick={() => {
+							setNow(Date.now())
+							dispatch(startTimer())
+						}}
 						variant='primary'
 						size='large'
 					>
