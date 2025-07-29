@@ -52,13 +52,14 @@ export const SoundCloudPlayer: React.FC = () => {
 				<div className={styles.iframeWrapper}>
 					<iframe
 						width='100%'
-						height='120'
+						height='130'
 						scrolling='no'
 						frameBorder='no'
 						allow='autoplay'
 						src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
 							url
-						)}&color=%23646cff&auto_play=true&show_artwork=true`}
+						)}&color=%23646cff&auto_play=true&show_artwork=true&show_comments=false&show_user=false&show_reposts=false&visual=false`}
+						className={styles.animatedIframe}
 					></iframe>
 				</div>
 			)}
