@@ -39,12 +39,12 @@ export const MainPage = () => {
 		<div className={styles.app}>
 			<Header isStatsVisible={isStatsVisible} onToggleStats={toggleStats} />
 			<BackgroundVideo src={video} />
+			<SoundCloudPlayer />
 			<main className={styles.main}>
 				{!isTimerMinimized && !isStatsVisible && (
 					<PomodoroTimer onMinimize={toggleTimer} />
 				)}
 				{isStatsVisible && <StatsChart />}
-				<SoundCloudPlayer />
 			</main>
 			{isTimerMinimized && <MiniTimer onMaximize={toggleTimer} />}
 		</div>
