@@ -5,6 +5,7 @@ export const SoundCloudPlayer: React.FC = () => {
 	const [input, setInput] = useState("")
 	const [url, setUrl] = useState<string | null>(null)
 	const [error, setError] = useState("")
+	const [collapsed, setCollapsed] = useState(false)
 
 	const handlePlay = () => {
 		if (!input.startsWith("https://soundcloud.com/")) {
@@ -46,10 +47,23 @@ export const SoundCloudPlayer: React.FC = () => {
 						✕
 					</button>
 				)}
+				{url && (
+					<button
+						onClick={() => setCollapsed((c) => !c)}
+						className={styles.collapseBtn}
+						title={collapsed ? "Развернуть" : "Свернуть"}
+					>
+						{collapsed ? "▼" : "▲"}
+					</button>
+				)}
 			</div>
 			{error && <div className={styles.error}>{error}</div>}
 			{url && (
-				<div className={styles.iframeWrapper}>
+				<div
+					className={
+						styles.iframeWrapper + (collapsed ? " " + styles.iframeHidden : "")
+					}
+				>
 					<iframe
 						width='100%'
 						height='130'

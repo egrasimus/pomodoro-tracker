@@ -72,6 +72,16 @@
 	overflow: hidden;
 	box-shadow: 0 2px 16px rgba(100, 108, 255, 0.12);
 	border: 1px solid rgba(100, 108, 255, 0.12);
+	transition: opacity 0.3s, width 0.3s, height 0.3s;
+}
+
+.iframeHidden {
+	opacity: 0;
+	width: 0 !important;
+	height: 0 !important;
+	pointer-events: none;
+	position: absolute;
+	left: -9999px;
 }
 
 .animatedIframe {
