@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { PomodoroTimer, StatsChart, Header, MiniTimer } from "@/widgets"
 import { BackgroundVideo } from "@/shared"
-import coffeeVideo from "@/assets/videos/coffee.mp4"
+import video from "@/assets/videos/coffee.mp4"
 import styles from "./MainPage.module.scss"
 
 export const MainPage = () => {
@@ -36,8 +36,8 @@ export const MainPage = () => {
 
 	return (
 		<div className={styles.app}>
-			<BackgroundVideo src={coffeeVideo} />
 			<Header isStatsVisible={isStatsVisible} onToggleStats={toggleStats} />
+			<BackgroundVideo src={video} />
 			<main className={styles.main}>
 				{!isTimerMinimized && !isStatsVisible && (
 					<PomodoroTimer onMinimize={toggleTimer} />
