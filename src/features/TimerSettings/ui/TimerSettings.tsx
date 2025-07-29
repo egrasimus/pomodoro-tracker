@@ -7,9 +7,7 @@ import styles from "./TimerSettings.module.scss"
 
 export const TimerSettings: React.FC = () => {
 	const dispatch = useDispatch<AppDispatch>()
-	const { isWorkTime, duration } = useSelector(
-		(state: RootState) => state.timer
-	)
+	const { duration } = useSelector((state: RootState) => state.timer)
 
 	const [workMinutes, setWorkMinutes] = useState(Math.floor(duration / 60))
 	const [breakMinutes, setBreakMinutes] = useState(5)
