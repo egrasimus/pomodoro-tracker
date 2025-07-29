@@ -3,6 +3,7 @@ import { PomodoroTimer, StatsChart, Header, MiniTimer } from "@/widgets"
 import { BackgroundVideo } from "@/shared"
 import video from "@/assets/videos/coffee.mp4"
 import styles from "./MainPage.module.scss"
+import { SoundCloudPlayer } from "@/features/SoundCloudPlayer"
 
 export const MainPage = () => {
 	const [isStatsVisible, setIsStatsVisible] = useState(() => {
@@ -43,6 +44,7 @@ export const MainPage = () => {
 					<PomodoroTimer onMinimize={toggleTimer} />
 				)}
 				{isStatsVisible && <StatsChart />}
+				<SoundCloudPlayer />
 			</main>
 			{isTimerMinimized && <MiniTimer onMaximize={toggleTimer} />}
 		</div>

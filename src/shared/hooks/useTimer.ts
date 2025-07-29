@@ -32,6 +32,7 @@ export const useTimer = () => {
 		} else {
 			if (intervalRef.current) clearInterval(intervalRef.current)
 		}
+	
 		return () => {
 			if (intervalRef.current) clearInterval(intervalRef.current)
 		}
