@@ -69,16 +69,7 @@
 	margin-top: -0.5rem;
 }
 
-.iframeWrapper {
-	width: 100%;
-	border-radius: 12px;
-	overflow: hidden;
-	box-shadow: 0 2px 16px rgba(100, 108, 255, 0.12);
-	border: 1px solid rgba(100, 108, 255, 0.12);
-	transition: opacity 0.3s, width 0.3s, height 0.3s;
-}
-
-.iframeHidden {
+.hidden {
 	opacity: 0;
 	width: 0 !important;
 	height: 0 !important;

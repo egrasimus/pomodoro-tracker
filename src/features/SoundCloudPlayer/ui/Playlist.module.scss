@@ -1,0 +1,85 @@
+.playlistWrapper {
+	margin-top: 0.5rem;
+	background: rgba(40, 40, 60, 0.5);
+	border-radius: 12px;
+	padding: 1rem;
+	box-shadow: 0 2px 12px rgba(100, 108, 255, 0.08);
+	border: 1px solid rgba(100, 108, 255, 0.1);
+}
+
+.inputRow {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	margin-bottom: 0.7rem;
+}
+
+.input {
+	flex: 1;
+	padding: 0.5rem 0.75rem;
+	border-radius: 6px;
+	border: 1px solid #646cff;
+	font-size: 1rem;
+	background: rgba(255, 255, 255, 0.1);
+	color: #fff;
+}
+
+.list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.track {
+	background: rgba(100, 108, 255, 0.08);
+	margin-bottom: 6px;
+	padding: 0.5rem 0.7rem;
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+	color: #fff;
+	opacity: 1;
+}
+
+.track.selected {
+	background: #646cff;
+	color: #fff;
+	border: 1.5px solid #535bf2;
+	box-shadow: 0 2px 8px rgba(100, 108, 255, 0.1);
+}
+
+.track.dragged {
+	opacity: 0.5;
+}
+
+.track .title {
+	flex: 1;
+	word-break: break-all;
+}
+
+.iconBtn {
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 1.1rem;
+	cursor: pointer;
+	border-radius: 4px;
+	padding: 0.2rem 0.5rem;
+	transition: background 0.2s;
+}
+.iconBtn:hover {
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.iframeWrapper {
+	width: 100%;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 2px 16px rgba(100, 108, 255, 0.12);
+	border: 1px solid rgba(100, 108, 255, 0.12);
+	transition: opacity 0.3s, width 0.3s, height 0.3s;
+}

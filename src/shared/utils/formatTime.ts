@@ -5,3 +5,8 @@ export const formatTime = (seconds: number): string => {
 		.toString()
 		.padStart(2, "0")}`
 }
+
+export function formatSoundCloudTitle(url: string): string {
+	const last = url.split("/").filter(Boolean).pop() || ""
+	return last.replace(/-/g, " ")
+}
